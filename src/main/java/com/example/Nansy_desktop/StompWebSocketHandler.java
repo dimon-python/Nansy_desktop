@@ -217,7 +217,6 @@ public class StompWebSocketHandler {
         "SEND\n" +
         "destination:%s\n" +
         "content-type:text/plain\n" +
-        // "content-length:%d\n" +
         "\n" +
         "%s\n" +
         "\u0000",
