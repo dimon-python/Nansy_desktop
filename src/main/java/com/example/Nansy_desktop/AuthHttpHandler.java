@@ -7,17 +7,10 @@ import java.net.http.HttpResponse;
 import java.io.IOException;
 
 public class AuthHttpHandler {
-
-    private static StompWebSocketHandler stompHandler;
-    private static String serverUrl;
 	private static String authUrl;
-	private static JwtHandler jwtHandler;
     private static String jwtToken;
 
-    public static void authenticateAndConnect(String pcUsername) {
-		jwtHandler = new JwtHandler();
-		stompHandler = new StompWebSocketHandler();
-
+    public static void authenticate(String pcUsername) {
         authUrl = ConfigManager.getSystemProperty("auth.server.url");
 		URI uri = URI.create(authUrl);
 				
@@ -42,9 +35,9 @@ public class AuthHttpHandler {
 
 			System.out.println("Response: " + response);
 			System.out.println(response.body());
-			jwtToken = jwtHandler.parseJwtToken(response.body());
+			jwtToken = JwtHandler.parseJwtToken(response.body());
 					
-			jwtHandler.setJwtToken(jwtToken);
+			JwtHandler.setJwtToken(jwtToken);
 			System.out.println("token saved");
 
 			System.out.println("jwtToken: " + jwtToken);
@@ -56,17 +49,6 @@ public class AuthHttpHandler {
     		System.err.println("Ошибка ввода-вывода: " + e.getMessage());
     		e.printStackTrace();
 		}
-
-	
-		serverUrl = ConfigManager.getSystemProperty("websocket.server.url");
-		jwtToken = jwtHandler.getJwtToken();
-
-		stompHandler.connect(serverUrl, pcUsername, jwtToken);
-		stompHandler.subscribe("/topic/echo", message -> {
-			System.out.println(message);
-		});
-
-		stompHandler.send("/app/echo", "Hello, World!");
 	}
     
     public static String getJwtToken() { return jwtToken; }

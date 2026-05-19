@@ -19,9 +19,13 @@ public class StompWebSocketHandler {
     private int subscriptionIdCounter = 0;
     private final Map<String, String> subscriptions = new HashMap<>();
     private final Map<String, Consumer<String>> subscriptionListeners = new HashMap<>();
+    private String serverUrl;
+    private String jwtToken;
 
-    public void connect(String serverUrl, String username, String jwtToken) {
+    public void connect(String username) {
         try {
+            serverUrl = ConfigManager.getSystemProperty("websocket.server.url");
+            jwtToken = JwtHandler.getJwtToken();
             String urlWithToken = serverUrl + "?token=" +jwtToken;
 
             HttpClient client = HttpClient.newHttpClient();

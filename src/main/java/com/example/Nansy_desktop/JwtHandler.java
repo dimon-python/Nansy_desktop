@@ -6,7 +6,7 @@ import com.google.gson.JsonObject;
 public class JwtHandler {
     private static String jwtToken;
     
-    public String parseJwtToken(String responseBody) {
+    public static String parseJwtToken(String responseBody) {
 		try {
 			Gson gson = new Gson();
 			JsonObject jsonResponse = gson.fromJson(responseBody, JsonObject.class);
@@ -19,12 +19,12 @@ public class JwtHandler {
 		}
 	}
 
-    public Boolean jwtIsExists() {
+    public static Boolean jwtIsExists() {
         jwtToken = ConfigManager.getUserProperty("auth.jwt.token");
         return jwtToken != null && !jwtToken.isEmpty();
     }
 
-    public String getJwtToken() {
+    public static String getJwtToken() {
         if (jwtIsExists() == true) {
             return jwtToken;
         } else {
@@ -32,7 +32,7 @@ public class JwtHandler {
         }
     }
 
-    public void setJwtToken(String token) {
+    public static void setJwtToken(String token) {
         if (token == null || token.isEmpty()) {
             System.err.println("Token is null");
             return;

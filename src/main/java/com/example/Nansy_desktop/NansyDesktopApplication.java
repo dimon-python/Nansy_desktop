@@ -2,33 +2,40 @@ package com.example.Nansy_desktop;
 
 public class NansyDesktopApplication {
 
-	// private static CommandExecutor commandExecutor;
 	private static String jwtToken;
 	private static String pcUsername;
+	private static StompWebSocketHandler stompHandler;
 
 	public static void main(String[] args) {
-		// System.out.println("запуск Nansy");
-		// commandExecutor = new CommandExecutor();
-
 		pcUsername = System.getProperty("user.name");
-		// System.out.println("Имя пк: " + pcUsername);
+		stompHandler = new StompWebSocketHandler();
 
 		new Thread(() -> {
         	UIHandler.launch(UIHandler.class, args);
     	}).start();
 
-		AuthHttpHandler.authenticateAndConnect(pcUsername);
-		jwtToken = AuthHttpHandler.getJwtToken();
+		if (JwtHandler.jwtIsExists() == true) {
+			stompHandler.connect(pcUsername);
 
+			stompHandler.subscribe("/topic/echo", message -> {
+			System.out.println(message);
+			});
+
+			stompHandler.send("/topic/echo", "YEEEEES!");
+		}
+
+		jwtToken = JwtHandler.getJwtToken();
+		
 		new Thread(() -> {
 			try {
 				Thread.sleep(500);
-			} catch (InterruptedException e) {
+
+				UIHandler.setQRImage(jwtToken);
+			} catch(InterruptedException e) {
 				e.printStackTrace();
 			}
-			UIHandler.setQRImage(jwtToken);
+
 		}).start();
-		
 
 		try {
 			Thread.currentThread().join();
