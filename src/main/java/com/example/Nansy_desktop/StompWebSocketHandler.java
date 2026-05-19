@@ -56,6 +56,16 @@ public class StompWebSocketHandler {
 
                     @Override
                     public CompletionStage<?> onText(WebSocket webSocket, CharSequence data, boolean last) {
+                        String message = data.toString();
+                        
+                        if (message == null || message.trim().isEmpty() || message.equals("\n")) {
+                            System.out.println("💓 Heartbeat received, sending pong...");
+                               
+                            webSocket.sendText("\n", true);
+                            webSocket.request(1);
+                            return null;
+                        }
+                        
                         buffer.append(data);
                         
                         if (last) {
@@ -283,7 +293,7 @@ public class StompWebSocketHandler {
         try {
             String ackFrame = String.format(
                 "ACK\n" +
-                "id:\s\n" +
+                "id:%s\n" +
                 "\n" +
                 "\0",
                 messageId
