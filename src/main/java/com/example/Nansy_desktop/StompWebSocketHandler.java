@@ -47,7 +47,7 @@ public class StompWebSocketHandler {
                             "host:localhost\n" +
                             "heart-beat:10000,10000\n" +
                             "\n" +
-                            "\0"
+                            "\u0000"
                         );
                         
                         webSocket.sendText(connectFrame, true);
