@@ -13,14 +13,12 @@ public class AuthHttpHandler {
 	private static String authUrl;
 	private static JwtHandler jwtHandler;
     private static String jwtToken;
-	private static ConfigManager configManager;
 
     public static void authenticateAndConnect(String pcUsername) {
 		jwtHandler = new JwtHandler();
 		stompHandler = new StompWebSocketHandler();
-		configManager = new ConfigManager();
 
-        authUrl = configManager.getSystemProperty("auth.server.url");
+        authUrl = ConfigManager.getSystemProperty("auth.server.url");
 		URI uri = URI.create(authUrl);
 				
 		try{
@@ -60,7 +58,7 @@ public class AuthHttpHandler {
 		}
 
 	
-		serverUrl = configManager.getSystemProperty("websocket.server.url");
+		serverUrl = ConfigManager.getSystemProperty("websocket.server.url");
 		jwtToken = jwtHandler.getJwtToken();
 
 		stompHandler.connect(serverUrl, pcUsername, jwtToken);
