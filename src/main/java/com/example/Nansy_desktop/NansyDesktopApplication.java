@@ -1,5 +1,9 @@
 package com.example.Nansy_desktop;
 
+import com.example.Nansy_desktop.handler.AuthHttpHandler;
+import com.example.Nansy_desktop.handler.JwtHandler;
+import com.example.Nansy_desktop.handler.StompWebSocketHandler;
+
 public class NansyDesktopApplication {
 
 	private static String jwtToken;
@@ -14,11 +18,13 @@ public class NansyDesktopApplication {
         	UIHandler.launch(UIHandler.class, args);
     	}).start();
 
+		AuthHttpHandler.authenticate(pcUsername);
+
 		if (JwtHandler.jwtIsExists() == true) {
 			stompHandler.connect(pcUsername);
 
 			stompHandler.subscribe("/topic/echo", message -> {
-			System.out.println(message);
+				CommandExecutor.handleCommand(message);
 			});
 
 			stompHandler.send("/topic/echo", "YEEEEES!");

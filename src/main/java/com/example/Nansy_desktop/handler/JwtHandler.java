@@ -1,5 +1,6 @@
-package com.example.Nansy_desktop;
+package com.example.Nansy_desktop.handler;
 
+import com.example.Nansy_desktop.ConfigManager;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 

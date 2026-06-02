@@ -1,4 +1,4 @@
-package com.example.Nansy_desktop;
+package com.example.Nansy_desktop.handler;
 
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Consumer;
+import com.example.Nansy_desktop.ConfigManager;
 
 public class StompWebSocketHandler {
     
@@ -58,9 +59,7 @@ public class StompWebSocketHandler {
                     public CompletionStage<?> onText(WebSocket webSocket, CharSequence data, boolean last) {
                         String message = data.toString();
                         
-                        if (message == null || message.trim().isEmpty() || message.equals("\n")) {
-                            System.out.println("💓 Heartbeat received, sending pong...");
-                               
+                        if (message == null || message.trim().isEmpty() || message.equals("\n")) {  
                             webSocket.sendText("\n", true);
                             webSocket.request(1);
                             return null;
