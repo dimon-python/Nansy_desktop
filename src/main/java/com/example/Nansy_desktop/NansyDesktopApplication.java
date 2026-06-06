@@ -18,8 +18,6 @@ public class NansyDesktopApplication {
         	UIHandler.launch(UIHandler.class, args);
     	}).start();
 
-		AuthHttpHandler.authenticate(pcUsername);
-
 		if (JwtHandler.jwtIsExists() == true) {
 			stompHandler.connect(pcUsername);
 
@@ -28,6 +26,10 @@ public class NansyDesktopApplication {
 			});
 
 			stompHandler.send("/topic/echo", "YEEEEES!");
+		} else {
+			if (AuthHttpHandler.register("testUser", "5674")) {
+				AuthHttpHandler.login("testUser", "5674");
+			}
 		}
 
 		jwtToken = JwtHandler.getJwtToken();
