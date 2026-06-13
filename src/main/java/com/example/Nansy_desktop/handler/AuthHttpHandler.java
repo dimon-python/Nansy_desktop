@@ -92,6 +92,11 @@ public class AuthHttpHandler {
 			return false;
 		}
 	}
+
+	// public static boolean verify() {
+	// 	jwtToken = JwtHandler.getJwtToken();
+		
+	// }
     
     public static String getJwtToken() { return jwtToken; }
 }
