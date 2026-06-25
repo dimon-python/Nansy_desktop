@@ -36,7 +36,6 @@ public class MainController {
             stage.setMinHeight(500);
             stage.setMaxWidth(800);
             stage.setMaxHeight(600);
-            stage.setResizable(true);
             stage.show();
 
         } catch(Exception e) {

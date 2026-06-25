@@ -19,11 +19,30 @@ public class AuthHttpHandler {
 	private static HttpClient httpClient;
 	private final static String LOGIN_ENDPOINT = "/login";
 	private final static String REGISTER_ENDPOINT = "/register";
+	private final static String CHECK_ENDPOINT = "/check";
 
 	static {
 		httpServerUrl = ConfigManager.getSystemProperty("auth.server.url"); //забираем url ws сервера
-		
 		httpClient = HttpClient.newHttpClient(); // создаем клиент
+	}
+
+	public static boolean checkConnection() {
+		try{
+			HttpRequest checkRequest = HttpRequest.newBuilder()
+				.uri(URI.create(httpServerUrl + CHECK_ENDPOINT))
+				.GET()
+				.build();
+			
+			HttpResponse<String> response = httpClient.send(
+				checkRequest,
+				HttpResponse.BodyHandlers.ofString()	
+			);
+
+			return response.statusCode() == 200;
+		} catch(IOException | InterruptedException e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
 
 	public static void login(String username, String password) {
