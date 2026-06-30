@@ -10,8 +10,8 @@
 
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.example.Nansy_desktop.controller.LoginController">
-            
+            fx:controller="com.example.Nansy_desktop.controller.RegistryController">
+
     <VBox spacing="15"
           alignment="CENTER"
           AnchorPane.topAnchor="0"
@@ -19,34 +19,34 @@
           AnchorPane.leftAnchor="0"
           AnchorPane.rightAnchor="0">
 
-        <Label text="Nansy">
+        <Label text="Регистрация">
             <font>
                 <Font size="28.0"/>
             </font>
         </Label>
 
-        <TextField fx:id="loginUsernameField" 
+        <TextField fx:id="registryUsernameField" 
                    promptText="Имя пользователя"
                    prefWidth="250"
                    maxWidth="250"/>
 
-        <PasswordField fx:id="loginPasswordField" 
+        <PasswordField fx:id="registryPasswordField" 
                        promptText="Пароль"
                        prefWidth="250"
                        maxWidth="250"/>
 
-        <Button text="Войти" 
-                onAction="#loginButton"
-                prefWidth="250"
-                maxWidth="250"/>
-
-        <Label text="Нет аккаунта?"/>
-
         <Button text="Зарегистрироваться" 
                 prefWidth="250"
                 maxWidth="250"
+                onAction="#registryButton"/>
+
+        <Label text="Есть аккаунт?"/>
+
+        <Button text="Войти" 
+                prefWidth="250"
+                maxWidth="250"
                 style="-fx-background-color: transparent; -fx-text-fill: #4169E1;"
-                onAction="#openRegistryWindow"/>
+                onAction="#openLoginWindow"/>
 
     </VBox>
 

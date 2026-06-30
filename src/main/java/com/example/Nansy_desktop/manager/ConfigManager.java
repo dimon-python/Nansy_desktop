@@ -1,4 +1,4 @@
-package com.example.Nansy_desktop;
+package com.example.Nansy_desktop.manager;
 
 import java.io.File;
 import java.io.FileInputStream;

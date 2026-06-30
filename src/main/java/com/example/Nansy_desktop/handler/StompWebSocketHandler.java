@@ -9,7 +9,9 @@ import java.util.Map;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Consumer;
-import com.example.Nansy_desktop.ConfigManager;
+
+import com.example.Nansy_desktop.manager.ConfigManager;
+import com.example.Nansy_desktop.util.JwtUtil;
 
 public class StompWebSocketHandler {
     
@@ -26,7 +28,7 @@ public class StompWebSocketHandler {
     public void connect(String username) {
         try {
             serverUrl = ConfigManager.getSystemProperty("websocket.server.url");
-            jwtToken = JwtHandler.getJwtToken();
+            jwtToken = JwtUtil.getJwtToken();
             String urlWithToken = serverUrl + "?token=" +jwtToken;
 
             HttpClient client = HttpClient.newHttpClient();

@@ -1,27 +1,29 @@
 package com.example.Nansy_desktop;
 
-import java.io.IOException;
-
-import com.example.Nansy_desktop.handler.AuthHttpHandler;
-import com.example.Nansy_desktop.handler.JwtHandler;
 import com.example.Nansy_desktop.handler.StompWebSocketHandler;
-
+import com.example.Nansy_desktop.manager.UIManager;
+import com.example.Nansy_desktop.service.AuthService;
+import com.example.Nansy_desktop.util.JwtUtil;
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 public class NansyDesktopApplication extends Application {
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		if (!AuthHttpHandler.checkConnection()) {
-			openNoEthernetWindow(primaryStage);
-		} else if (!JwtHandler.jwtIsExists()) {
-			openLoginWindow(primaryStage);
-		}
+		UIManager.init(primaryStage);
 
-		openMainWindow(primaryStage);
+		if (!AuthService.checkConnection()) {
+			UIManager.openWindow("/fxml/no_ethernet.fxml", "Отсутствует подключение к интернету");
+		} else if (!JwtUtil.jwtIsExists()) {
+			UIManager.openWindow("/fxml/login.fxml", "Вход");
+		} else {
+			if (AuthService.verify()) {
+				UIManager.openWindow("/fxml/main.fxml", "Nansy");
+			} else {
+				UIManager.openWindow("/fxml/login.fxml", "Вход");
+			}
+		}
 
 		try {
 			StompWebSocketHandler ws = new StompWebSocketHandler();
@@ -30,60 +32,6 @@ public class NansyDesktopApplication extends Application {
 				CommandExecutor.handleCommand(v);
 			});
 		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	private void openMainWindow(Stage primaryStage) {
-		try {
-			FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/main.fxml"));
-			Scene scene = new Scene(loader.load());
-
-			primaryStage.setTitle("Nansy");
-			primaryStage.setScene(scene);
-			primaryStage.setMinWidth(600);
-            primaryStage.setMinHeight(500);
-            primaryStage.setMaxWidth(800);
-            primaryStage.setMaxHeight(600);
-            primaryStage.setResizable(true);
-			primaryStage.show();
-		} catch(IOException e) {
-			e.printStackTrace();
-		}
-	}
-
-	private void openLoginWindow(Stage primaryStage) {
-		try {
-			FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/login.fxml"));
-			Scene scene = new Scene(loader.load());
-
-			primaryStage.setTitle("Nansy: вход");
-			primaryStage.setScene(scene);
-			primaryStage.setMinWidth(600);
-            primaryStage.setMinHeight(500);
-            primaryStage.setMaxWidth(800);
-            primaryStage.setMaxHeight(600);
-            primaryStage.setResizable(true);
-			primaryStage.show();
-		} catch(IOException e) {
-			e.printStackTrace();
-		}
-	}
-
-	private void openNoEthernetWindow(Stage primaryStage) {
-		try{
-			FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/no_ethernet.fxml"));
-			Scene scene = new Scene(loader.load());
-
-			primaryStage.setTitle("Nansy: нет подключения к интернету");
-			primaryStage.setScene(scene);
-			primaryStage.setMinWidth(600);
-            primaryStage.setMinHeight(500);
-            primaryStage.setMaxWidth(800);
-            primaryStage.setMaxHeight(600);
-            primaryStage.setResizable(true);
-			primaryStage.show();
-		} catch(IOException e) {
 			e.printStackTrace();
 		}
 	}

@@ -1,10 +1,10 @@
-package com.example.Nansy_desktop.handler;
+package com.example.Nansy_desktop.util;
 
-import com.example.Nansy_desktop.ConfigManager;
+import com.example.Nansy_desktop.manager.ConfigManager;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
-public class JwtHandler {
+public class JwtUtil {
     private static String jwtToken;
     
     public static String parseJwtToken(String responseBody) {
