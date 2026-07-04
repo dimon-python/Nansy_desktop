@@ -1,6 +1,7 @@
 package com.example.Nansy_desktop;
 
 import com.example.Nansy_desktop.handler.StompWebSocketHandler;
+import com.example.Nansy_desktop.manager.CommandManager;
 import com.example.Nansy_desktop.manager.UIManager;
 import com.example.Nansy_desktop.service.AuthService;
 import com.example.Nansy_desktop.util.JwtUtil;
@@ -25,11 +26,13 @@ public class NansyDesktopApplication extends Application {
 			}
 		}
 
+		CommandManager.loadCommands();
+
 		try {
 			StompWebSocketHandler ws = new StompWebSocketHandler();
 			ws.connect("dimond");
 			ws.subscribe("/topic/echo", v -> {
-				CommandExecutor.handleCommand(v);
+				CommandManager.handleCommand(Long.valueOf(v));
 			});
 		} catch (Exception e) {
 			e.printStackTrace();

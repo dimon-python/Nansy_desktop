@@ -33,3 +33,5 @@ build/
 .vscode/
 
 nansy.properties
+data/
+commands.json
