@@ -4,11 +4,14 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.example.Nansy_desktop.ActionCode;
 import com.example.Nansy_desktop.Command;
+import com.example.Nansy_desktop.Param;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -17,7 +20,7 @@ import io.jsonwebtoken.io.IOException;
 public class CommandManager {
     private static Map<Long, Command> commandIdList = new HashMap<>();
     private static Map<Long, String> commandNameList = new HashMap<>();
-    private static Long idCounter = 0L;
+    private static Long idCounter = -1L;
     private static final String DATA_DIR = System.getProperty("user.dir") + "/data";
     private static final String COMMANDS_FILE_PATH = DATA_DIR + "/commands.json";
     
@@ -51,8 +54,8 @@ public class CommandManager {
         }
     }
 
-    public static void createCommand(String name, String actionCode) {
-        Command command = new Command(name, actionCode);
+    public static void createCommand(String name, String actionCode, Map<String, String> params) {
+        Command command = new Command(name, actionCode, params);
         idCounter += 1;
         Long id = idCounter;
 
@@ -109,8 +112,6 @@ public class CommandManager {
                 }
             }
 
-            System.out.println("Размер commandNameList: " + commandNameList.size());
-
             for (Map.Entry<Long, String> entry : commandNameList.entrySet()) {
                 String id = entry.getKey().toString();
                 String name = entry.getValue();
@@ -119,5 +120,15 @@ public class CommandManager {
         } catch(Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public static List<String> getDescriptionsActionCodeParameters(ActionCode actionCode) {
+        List<Param> params = actionCode.getParameters();
+        List<String> descriptions = new ArrayList<>();
+
+        for (Param param : params) {
+            descriptions.add(param.getDescription());
+        }
+        return descriptions;
     }
 }

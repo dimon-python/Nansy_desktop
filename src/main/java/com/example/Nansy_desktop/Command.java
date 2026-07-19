@@ -9,9 +9,10 @@ public class Command {
     private String actionCode;
     private Map<String, String> params = new HashMap<>();
     
-    public Command(String name, String actionCode) {
+    public Command(String name, String actionCode, Map<String, String> params) {
         this.name = name;
         this.actionCode = actionCode;
+        this.params = params;
     }
     
     public String getActionCode() { return actionCode; }

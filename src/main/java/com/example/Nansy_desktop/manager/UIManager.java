@@ -9,8 +9,8 @@ public class UIManager {
     
     public static void init(Stage stage) {
         primaryStage = stage;
-        primaryStage.setHeight(1);
-        primaryStage.setWidth(1);
+        primaryStage.setHeight(600);
+        primaryStage.setWidth(800);
         primaryStage.setMinWidth(600);
         primaryStage.setMinHeight(500);
         primaryStage.setMaxWidth(800);

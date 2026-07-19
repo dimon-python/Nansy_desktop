@@ -1,6 +1,5 @@
 package com.example.Nansy_desktop;
 
-import com.example.Nansy_desktop.handler.StompWebSocketHandler;
 import com.example.Nansy_desktop.manager.CommandManager;
 import com.example.Nansy_desktop.manager.UIManager;
 import com.example.Nansy_desktop.service.AuthService;
@@ -13,7 +12,26 @@ public class NansyDesktopApplication extends Application {
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		UIManager.init(primaryStage);
+		startCheck();
+		CommandManager.loadCommands();
 
+		// try {
+		// 	StompWebSocketHandler ws = new StompWebSocketHandler();
+		// 	ws.connect();
+		// 	ws.subscribe("/topic/echo", v -> {
+		// 		CommandManager.handleCommand(Long.valueOf(v));
+		// 	});
+		// 	String sessionId = ws.getSessionId();
+		// 	ws.subscribe("/topic/pc/id-response/" + sessionId, v -> {
+		// 		System.out.println(v);
+		// 	});
+		// 	ws.send("/app/pc/get-id", null);
+		// } catch (Exception e) {
+		// 	e.printStackTrace();
+		// }
+	}
+
+	public static void startCheck() {
 		if (!AuthService.checkConnection()) {
 			UIManager.openWindow("/fxml/no_ethernet.fxml", "Отсутствует подключение к интернету");
 		} else if (!JwtUtil.jwtIsExists()) {
@@ -24,18 +42,6 @@ public class NansyDesktopApplication extends Application {
 			} else {
 				UIManager.openWindow("/fxml/login.fxml", "Вход");
 			}
-		}
-
-		CommandManager.loadCommands();
-
-		try {
-			StompWebSocketHandler ws = new StompWebSocketHandler();
-			ws.connect("dimond");
-			ws.subscribe("/topic/echo", v -> {
-				CommandManager.handleCommand(Long.valueOf(v));
-			});
-		} catch (Exception e) {
-			e.printStackTrace();
 		}
 	}
 

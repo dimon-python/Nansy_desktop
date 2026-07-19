@@ -24,8 +24,9 @@ public class StompWebSocketHandler {
     private final Map<String, Consumer<String>> subscriptionListeners = new HashMap<>();
     private String serverUrl;
     private String jwtToken;
+    private boolean isStompConnected = false;
 
-    public void connect(String username) {
+    public void connect() {
         try {
             serverUrl = ConfigManager.getSystemProperty("websocket.server.url");
             jwtToken = JwtUtil.getJwtToken();
@@ -134,13 +135,10 @@ public class StompWebSocketHandler {
     }
 
     private void handleConnectedFrame(String[] lines) {
-        for (String line : lines) {
-            if (line.startsWith("session:")) {
-                sessionId = line.substring("session:".length());
-                System.out.println("STOMP подключен, session-id: " + sessionId);
-                break;
-            }
+        for (Consumer<String> listener : messageListeners) {
+            listener.accept("CONNECTED");
         }
+        isStompConnected = true;
     }
 
     private void handleMessageFrame(String[] lines) {
@@ -176,7 +174,6 @@ public class StompWebSocketHandler {
             }
         }
 
-        //String destination = headers.get("destination");
         String subscription = headers.get("subscription");
         String messageId = headers.get("message-id");
         String messageBody = body.toString();
@@ -305,6 +302,20 @@ public class StompWebSocketHandler {
         } catch (Exception e) {
             System.out.println("Ошибка: " + e);
         }
+    }
+
+    public void connectAndWait() {
+        connect();
+    
+        while (!isStompConnected) {
+            try {
+               Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    
+        System.out.println("✅ STOMP соединение установлено и готово к работе!");
     }
 
     public void addMessageListener(Consumer<String> listener) {

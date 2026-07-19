@@ -7,7 +7,8 @@ public enum ActionCode {
     SHUTDOWN(
         "Выключение компьютера",
         Arrays.asList(
-            new Param("delay", "задержка", "int", "5")
+            new Param("delay", "задержка", "int", "5"),
+            new Param("yes", "yeeeeeees", "string", "yesyes")
         )
     );
 
